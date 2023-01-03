@@ -28,8 +28,6 @@ class Gen1Pokemon {
             defense_ev = (data[21] << 8) | data[22];
             speed_ev = (data[23] << 8) | data[24];
             special_ev = (data[25] << 8) | data[26];
-            // TODO: Parse IV
-            iv = 0x255;
             move_1_pp = data[29];
             move_2_pp = data[30];
             move_3_pp = data[31];
@@ -40,6 +38,9 @@ class Gen1Pokemon {
             defense = (data[38] << 8) | data[39];
             speed = (data[40] << 8) | data[41];
             special = (data[42] << 8) | data[43];
+
+            parseIvs(data[27], data[28]);
+
             return;
         };
         void print() {
@@ -61,7 +62,10 @@ class Gen1Pokemon {
             std::cout << "Defense EV: " << (int)defense_ev << std::endl;
             std::cout << "Speed EV: " << (int)speed_ev << std::endl;
             std::cout << "Special EV: " << (int)special_ev << std::endl;
-            std::cout << "IV: " << (int)iv << std::endl;
+            std::cout << "Attack IV: " << (int)attack_iv << std::endl;
+            std::cout << "Defense IV: " << (int)defense_iv << std::endl;
+            std::cout << "Speed IV: " << (int)speed_iv << std::endl;
+            std::cout << "Special IV: " << (int)special_iv << std::endl;
             std::cout << "Move 1 PP: " << (int)move_1_pp << std::endl;
             std::cout << "Move 2 PP: " << (int)move_2_pp << std::endl;
             std::cout << "Move 3 PP: " << (int)move_3_pp << std::endl;
@@ -92,7 +96,10 @@ class Gen1Pokemon {
         uint16_t defense_ev; // 2 bytes long
         uint16_t speed_ev; // 2 bytes long
         uint16_t special_ev; // 2 bytes long 
-        uint16_t iv; // 2 bytes long
+        uint16_t attack_iv; // 2 bytes long
+        uint16_t defense_iv; // 2 bytes long
+        uint16_t speed_iv; // 2 bytes long
+        uint16_t special_iv; // 2 bytes long
         uint8_t move_1_pp; // 1 byte long
         uint8_t move_2_pp; // 1 byte long
         uint8_t move_3_pp; // 1 byte long
@@ -103,6 +110,13 @@ class Gen1Pokemon {
         uint16_t defense; // 2 bytes long
         uint16_t speed; // 2 bytes long
         uint16_t special;  // 2 bytes long
+    private:
+        void parseIvs(const int attack_defense, const int speed_special) {
+            attack_iv = attack_defense >> 4;
+            defense_iv = attack_defense & 0x0F;
+            speed_iv = speed_special >> 4;
+            special_iv = speed_special & 0x0F;
+        }
 };
 
 #endif
