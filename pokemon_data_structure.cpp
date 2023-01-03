@@ -1,24 +1,95 @@
 #include <cstdint>
 #include <iomanip>
+#include <vector>
 
-#include "read_save_file.h"
+#include "load_save_file.h"
+
+const int POKEMON_PARTY_OFFSET_START = 0x2F34;
+const int POKEMON_PARTY_OFFSET = 0x2C;
+const int SAVE_FILE_SIZE = 0x8000;
 
 class Pokemon {
     public:
+        Pokemon(std::vector<uint8_t> data) {
+            if(data.size() != 44) throw std::logic_error("Pokemon: The data is not the expected size.");
+
+            species = data[0];
+            current_hp = (data[1] << 8) | data[2];
+            level = data[3];
+            status_condition = data[4];
+            type_1 = data[5];
+            type_2 = data[6];
+            catch_rate_held_item = data[7];
+            move_1 = data[8];
+            move_2 = data[9];
+            move_3 = data[10];
+            move_4 = data[11];
+            original_trainer_id = (data[12] << 8) | data[13];
+            experience_points = (data[14] << 16) | (data[15] << 8) | data[16];
+            hp_ev = (data[17] << 8) | data[18];
+            attack_ev = (data[19] << 8) | data[20];
+            defense_ev = (data[21] << 8) | data[22];
+            speed_ev = (data[23] << 8) | data[24];
+            special_ev = (data[25] << 8) | data[26];
+            // TODO: Parse IV
+            iv = 0x255;
+            move_1_pp = data[29];
+            move_2_pp = data[30];
+            move_3_pp = data[31];
+            move_4_pp = data[32];
+            level_2 = data[33];
+            max_hp = (data[34] << 8) | data[35];
+            attack = (data[36] << 8) | data[37];
+            defense = (data[38] << 8) | data[39];
+            speed = (data[40] << 8) | data[41];
+            special = (data[42] << 8) | data[43];
+            return;
+        };
+        void print() {
+            std::cout << "Species: " << (int)species << std::endl;
+            std::cout << "Current HP: " << (int)current_hp << std::endl;
+            std::cout << "Level: " << (int)level << std::endl;
+            std::cout << "Status Condition: " << (int)status_condition << std::endl;
+            std::cout << "Type 1: " << (int)type_1 << std::endl;
+            std::cout << "Type 2: " << (int)type_2 << std::endl;
+            std::cout << "Catch Rate/Held Item: " << (int)catch_rate_held_item << std::endl;
+            std::cout << "Move 1: " << (int)move_1 << std::endl;
+            std::cout << "Move 2: " << (int)move_2 << std::endl;
+            std::cout << "Move 3: " << (int)move_3 << std::endl;
+            std::cout << "Move 4: " << (int)move_4 << std::endl;
+            std::cout << "Original Trainer ID: " << (int)original_trainer_id << std::endl;
+            std::cout << "Experience Points: " << (int)experience_points << std::endl;
+            std::cout << "HP EV: " << (int)hp_ev << std::endl;
+            std::cout << "Attack EV: " << (int)attack_ev << std::endl;
+            std::cout << "Defense EV: " << (int)defense_ev << std::endl;
+            std::cout << "Speed EV: " << (int)speed_ev << std::endl;
+            std::cout << "Special EV: " << (int)special_ev << std::endl;
+            std::cout << "IV: " << (int)iv << std::endl;
+            std::cout << "Move 1 PP: " << (int)move_1_pp << std::endl;
+            std::cout << "Move 2 PP: " << (int)move_2_pp << std::endl;
+            std::cout << "Move 3 PP: " << (int)move_3_pp << std::endl;
+            std::cout << "Move 4 PP: " << (int)move_4_pp << std::endl;
+            std::cout << "Level 2: " << (int)level_2 << std::endl;
+            std::cout << "Max HP: " << (int)max_hp << std::endl;
+            std::cout << "Attack: " << (int)attack << std::endl;
+            std::cout << "Defense: " << (int)defense << std::endl;
+            std::cout << "Speed: " << (int)speed << std::endl;
+            std::cout << "Special: " << (int)special << std::endl;
+            return;
+        };
         uint8_t species; // 1 byte long
         uint16_t current_hp; // 2 bytes long
         uint8_t level; // 1 byte long
         uint8_t status_condition; // 1 byte long
         uint8_t type_1; // 1 byte long
         uint8_t type_2; // 1 byte long
-        uint8_t catch_rate; // 1 byte long
-        uint8_t held_item; // 1 byte long
+        uint8_t catch_rate_held_item; // 1 byte long
         uint8_t move_1; // 1 byte long
         uint8_t move_2; // 1 byte long
         uint8_t move_3; // 1 byte long
         uint8_t move_4; // 1 byte long
         uint16_t original_trainer_id; // 2 bytes long
-        uint32_t experience_points; // 4 bytes long
+        uint32_t experience_points; // 3 bytes long
         uint16_t hp_ev; // 2 bytes long
         uint16_t attack_ev; // 2 bytes long
         uint16_t defense_ev; // 2 bytes long
@@ -37,46 +108,27 @@ class Pokemon {
         uint16_t special;  // 2 bytes long
 };
 
-const int POKEMON_PARTY_OFFSET_START = 0x2F34;
-const uint8_t POKEMON_PARTY_OFFSET = 0x2C;
+
 
 int main() {
-    std::ifstream save = readSaveFile("./save.sav");
+    const char* save = load_save_file("save.sav", SAVE_FILE_SIZE);
 
-    Pokemon pokemon[6];
-
-    for (int i = 0; i < 6; i++) {
-        save.seekg(POKEMON_PARTY_OFFSET_START + (i * POKEMON_PARTY_OFFSET));
-
-        // knowing the size of the data type, we can read it directly into the struct
-        save.read((char*)&pokemon[i], sizeof(Pokemon));
-
+    for(int i = 0; i < 6; i++) {
+        const int start = POKEMON_PARTY_OFFSET_START + (i * POKEMON_PARTY_OFFSET);
+        const int end = start + POKEMON_PARTY_OFFSET;
         
-    }
+        // get a chunk of the save file
+        std::vector<uint8_t> chunk;
+        for(int j = start; j < end; j++) {
+            chunk.push_back(save[j]);
+        }
 
-    for (int i = 0; i < 6; i++) {
-        Pokemon poke = pokemon[i];
+        Pokemon pokemon = Pokemon(chunk);
 
         std::cout << "\n\n\n\n" << std::endl;
         std::cout << "Pokemon " << i << std::endl;
-        std::cout << "Species: " << (int)poke.species << std::endl;
-        std::cout << "Current HP: " << (int)poke.current_hp << std::endl;
-        std::cout << "Level: " << (int)poke.level << std::endl;
-        std::cout << "Status Condition: " << (int)poke.status_condition << std::endl;
-        std::cout << "Type 1: " << (int)poke.type_1 << std::endl;
-        std::cout << "Type 2: " << (int)poke.type_2 << std::endl;
-        std::cout << "Catch Rate: " << (int)poke.catch_rate << std::endl;
-        std::cout << "Held Item: " << (int)poke.held_item << std::endl;
-        std::cout << "Move 1: " << (int)poke.move_1 << std::endl;
-        std::cout << "Move 2: " << (int)poke.move_2 << std::endl;
-        std::cout << "Move 3: " << (int)poke.move_3 << std::endl;
-        std::cout << "Move 4: " << (int)poke.move_4 << std::endl;
-        std::cout << "Original Trainer ID: " << (int)poke.original_trainer_id << std::endl;
-        std::cout << "Experience Points: " << (int)poke.experience_points << std::endl;
-        std::cout << "HP EV: " << (int)poke.hp_ev << std::endl;
-        std::cout << "Attack EV: " << (int)poke.attack_ev << std::endl;
-        std::cout << "Defense EV: " << (int)poke.defense_ev << std::endl;
-        std::cout << "Speed EV: " << (int)poke.speed_ev << std::endl;
-        std::cout << "Special EV: " << (int)poke.special_ev << std::endl;
+        pokemon.print();
     }
+
+    return 0;
 }
