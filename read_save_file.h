@@ -17,7 +17,7 @@ extern std::ifstream readSaveFile(std::string path) {
         return file;
     }
 
-    throw std::logic_error("It is not possible to open the saveFile.");
+    throw std::logic_error("External: It is not possible to open the saveFile.");
 }
 
 #endif
