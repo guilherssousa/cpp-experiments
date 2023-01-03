@@ -5,7 +5,7 @@
 #ifndef GEN1POKEMON_STRUCT_H
 #define GEN1POKEMON_STRUCT_H
 
-extern class Gen1Pokemon {
+class Gen1Pokemon {
     public:
         Gen1Pokemon(std::vector<uint8_t> data) {
             if(data.size() != 44) throw std::logic_error("Pokemon: The data is not the expected size.");

@@ -10,7 +10,6 @@ std::ifstream::pos_type filesize(const char* filename) {
 }
 
 extern const char * load_save_file(const char* path, const int& expectedFileSize) {
-
     FILE* file = fopen(path, "rb");
 
     char* data = new char[expectedFileSize];
