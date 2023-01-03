@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdint>
-#include <typeinfo>
 
 #include "read_save_file.h"
 
