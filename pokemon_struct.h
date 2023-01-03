@@ -2,8 +2,8 @@
 #include <cstdint>
 #include <iostream>
 
-#ifndef POKEMON_STRUCT_H
-#define POKEMON_STRUCT_H
+#ifndef GEN1POKEMON_STRUCT_H
+#define GEN1POKEMON_STRUCT_H
 
 extern class Gen1Pokemon {
     public:
