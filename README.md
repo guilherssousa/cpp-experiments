@@ -11,6 +11,7 @@ This repository contains a collection of C++ experiments. The experiments are, e
 5. Gen I Checksum Header - [`gen1_checksum.h`](gen1_checksum.h)
 6. Load Save File Header - [`load_save_file.h`](load_save_file.h)
 7. Pokémon Data Structure - [`pokemon_data_structure.cpp`](pokemon_data_structure.cpp)
+8. Pokémon Data Structure Header - [`pokemon_struct.h`](pokemon_struct.h)
 
 ### Notes
 
