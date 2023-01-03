@@ -8,6 +8,7 @@ This repository contains a collection of C++ experiments. The experiments are, e
 2. Read Save File Header - [`read_save_file.h`](read_save_file.h)
 3. Hex dump with imports - [`hex_dump_external_function.cpp`](hex_dump_external_function.cpp)
 4. Gen I Checksum - [`gen1_checksum.cpp`](gen1_checksum.cpp)
+5. Gen I Checksum Header - [`gen1_checksum.h`](gen1_checksum.h)
 
 ### Notes
 
