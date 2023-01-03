@@ -1,6 +1,6 @@
 ## C++ Experiments
 
-This repository contains a collection of C++ experiments. The experiments are, essentially, a collection of small programs that I wrote to learn about C++.
+This repository contains a collection of C++ experiments. The experiments are, essentially, a collection of small programs that I wrote to learn about C++. The notes were done using external references and ChatGPT explanations.
 
 ### List of programs
 
