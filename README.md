@@ -7,3 +7,7 @@ This repository contains a collection of C++ experiments. The experiments are, e
 1. Hex dump - `hex_dump.cpp`
 2. Read Save File Header - `read_save_file.h`
 3. Hex dump with imports - `hex_dump_external_function.cpp`
+
+### Notes
+
+1. [When to use std::vector and arrays](notes/arrays-vectors.md)
