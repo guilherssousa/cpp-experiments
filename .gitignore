@@ -3,4 +3,4 @@
 *.gb*
 
 out/
-includes/
+include/
