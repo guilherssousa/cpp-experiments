@@ -18,25 +18,40 @@ class url_search_params {
             // print params_list
             for (auto& param : params_list) {
                 std::vector<std::string> key_value_pair = split(param, '=');
-                _params[key_value_pair[0]] = key_value_pair[1];
+                _params[key_value_pair.at(0)] = key_value_pair.at(1);
             }
         }
-        void add(std::string& key, std::string& value) {
-            _params[key] = value;
+        url_search_params(std::unordered_map<const char*, const char*> params) {
+            for (auto& param : params) {
+                _params[param.first] = param.second;
+            }
         }
-        void remove(std::string& key) {
-            _params.erase(key);
+        void add(const char& key, const char& value) {
+            std::string str1(1, key);
+            std::string str2(1, value);
+            _params[str1] = str2;
         }
-        std::string get(std::string& key) {
-            return _params[key];
+        void remove(const char& key) {
+            std::string str1(1, key);
+            _params.erase(str1);
         }
-        bool has(std::string& key) {
-            return _params.find(key) != _params.end();
+        std::string get(const char& key) {
+            std::string str1(1, key);
+            return _params[str1];
+        }
+        bool has(const char& key) {
+            std::string str1(1, key);
+            return _params.find(str1) != _params.end();
         }
         std::string toString() {
             std::string params_str = "";
+            unsigned int i = 0;
             for (auto& param : _params) {
-                params_str += param.first + "=" + param.second + "&";
+                if(i > 0) {
+                    params_str += "&";
+                }
+                params_str += param.first + "=" + param.second;
+                ++i;
             }
             return params_str;
         }
@@ -49,8 +64,12 @@ class url_search_params {
 };
 
 int main() {
-    std::string params = "?a=1&b=2&c=3";
-    url_search_params p = url_search_params(params);
+    url_search_params p = url_search_params({
+        std::make_pair("name", "John"),
+        std::make_pair("age", "30"),
+    });
+
+    std::cout << p.toString() << std::endl;
 
     return 0;
 }
