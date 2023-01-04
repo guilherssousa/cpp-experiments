@@ -12,6 +12,8 @@ This repository contains a collection of C++ experiments. The experiments are, e
 6. Load Save File Header - [`load_save_file.h`](load_save_file.h)
 7. Pokémon Data Structure - [`pokemon_data_structure.cpp`](pokemon_data_structure.cpp)
 8. Pokémon Data Structure Header - [`pokemon_struct.h`](pokemon_struct.h)
+9. String Utils Header - [`string_utils.h`](string_utils.h)
+10. Javascript URLSearchParams API - [`url_search_params.cpp`](url_search_params.cpp)
 
 ### Notes
 
